@@ -4,56 +4,99 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Clock</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+            svg {
+                width: 100%;
+            }
+            body {
+                background: #ddd;
+            }
+
+            .clock {
+                position: absolute;
+                width: 100%;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                color: #000;
+                text-align: center;
+                font-size: calc(7vh + 10vw);
+                font-family: Montserrat;
+                font-weight: 900;
+                letter-spacing: 7px;
+            }
+        </style>
     </head>
     <body>
-        <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+        <div id="ClockDisplay" class="clock" onload="showTime()"></div>
 
         <script>
+            let is24HourClock = false;
             function showTime() {
                 var date = new Date();
                 var h = date.getHours(); // 0 - 23
                 var m = date.getMinutes(); // 0 - 59
-                var s = date.getSeconds(); // 0 - 59
+
                 var session = "AM";
 
                 if (h == 0) {
                     h = 12;
                 }
 
-                if (h > 12) {
+                // If is24HourClock is true, then the clock will be in 24 hour format
+                if (is24HourClock) {
+                    session = "";
+                }
+                // Else, the clock will be in 12 hour format
+                if (h > 12 && !is24HourClock) {
                     h = h - 12;
                     session = "PM";
                 }
 
                 h = h < 10 ? "0" + h : h;
                 m = m < 10 ? "0" + m : m;
-                s = s < 10 ? "0" + s : s;
 
-                var time = h + ":" + m + ":" + s + " " + session;
-                document.getElementById("MyClockDisplay").innerText = time;
-                document.getElementById("MyClockDisplay").textContent = time;
+                var time = h + ":" + m + " " + session;
+                document.getElementById("ClockDisplay").innerText = time;
+                document.getElementById("ClockDisplay").textContent = time;
 
-                setTimeout(showTime, 1000);
+            }
+            function changeFormat() {
+                is24HourClock = !is24HourClock;
+                showTime();
             }
 
-            showTime();
+            function loadTheme(){
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const theme = urlParams.get('t');
+
+                if(theme == "dark"){
+                    document.body.style.backgroundColor = "#191919";
+                    document.getElementById("ClockDisplay").style.color = "#fff";
+                }
+                if(theme == "aesthetic"){
+                    document.body.style.backgroundColor = "#f6e0b5";
+                    document.getElementById("ClockDisplay").style.color = "	#66545e";
+                    document.getElementById("ClockDisplay").style.fontFamily = "Dancing Script";
+                }
+                if (theme == "synthwave"){
+                    document.body.style.backgroundColor = "#463564";
+                    document.getElementById("ClockDisplay").style.color = "#36F9ED";
+                    document.getElementById("ClockDisplay").style.textShadow = "0 0 6px #36F9ED";
+                }
+            }
+
+
+            // ---------
+            // Main Code
+            // ---------
+            loadTheme();
+            document.addEventListener("click", changeFormat); // On click, change the format of the clock
+            showTime(); // Show the time
+            setTimeout(showTime, 1000); // Update the clock every second
         </script>
-        <style>
-            body {
-                background: black;
-            }
-
-            .clock {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translateX(-50%) translateY(-50%);
-                color: #17d4fe;
-                font-size: 60px;
-                font-family: Roboto;
-                letter-spacing: 7px;
-            }
-        </style>
     </body>
 </html>
