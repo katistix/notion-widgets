@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Quote</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital@1&display=swap');
+            body {
+                background: #fff;
+            }
+
+            .quote {
+                position: absolute;
+                width: 100%;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                color: #191919;
+                text-align: center;
+                font-size: calc(3.1vh + 3.1vw);
+                /* font-size: 2.5em; */
+                font-family: 'EB Garamond', serif;
+                /* font-weight: 900;     */
+                /* letter-spacing: 7px; */
+            }
+            .author{
+                position: absolute;
+                width: 100%;
+                bottom: 0px;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                color: #191919;
+                text-align: center;
+                font-size: calc(0.4vh + 2.6vw);
+                /* font-size: 1.5em; */
+                font-family: 'EB Garamond', serif;
+                /* font-weight: 900;     */
+                /* letter-spacing: 7px; */
+            }
+        </style>
+    </head>
+    <body>
+        <div id="QuoteDisplay" class="quote" onload="">“A room without books is like a body without a soul.”</div>
+        <div id="AuthorDisplay" class="author" onload="">Albert Einstein</div>
+        <script>
+            const api_url ="https://api.quotable.io/random";
+            
+            async function renewQuote(){
+                const response = await fetch(api_url);
+                var data = await response.json();
+                document.getElementById("QuoteDisplay").innerText = '"' + data.content + '"';
+                document.getElementById("AuthorDisplay").innerText = data.author;
+            }
+
+            function loadTheme(){
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const theme = urlParams.get('t');
+
+                if(theme == "dark"){
+                    document.body.style.backgroundColor = "#191919";
+
+                    document.getElementById("QuoteDisplay").style.color = "#fff";
+                    document.getElementById("AuthorDisplay").style.color = "#fff";
+                }
+            }
+
+            // ---------
+            // Main Code
+            // ---------
+            loadTheme();
+            document.addEventListener("click", renewQuote); // On click, change the format of the clock
+            renewQuote();
+            // setTimeout(re, 1000); // Update the clock every second
+        </script>
+    </body>
+</html>
